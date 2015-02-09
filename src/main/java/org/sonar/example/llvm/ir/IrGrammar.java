@@ -17,7 +17,7 @@ public class IrGrammar {
     this.f = f;
   }
 
-  public RegisterSyntax VARIABLE() {
+  public RegisterSyntax REGISTER() {
     return b.<RegisterSyntax>nonterminal(IrGrammarRuleKeys.REGISTER)
       .is(f.register(b.pattern("%[0-9a-zA-Z.]++")));
   }
