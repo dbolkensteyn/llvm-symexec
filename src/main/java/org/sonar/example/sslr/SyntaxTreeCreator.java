@@ -78,6 +78,18 @@ public class SyntaxTreeCreator<T> {
     MutableParsingRule rule = (MutableParsingRule) node.getMatcher();
     GrammarRuleKey ruleKey = rule.getRuleKey();
 
+    if (mapping.isToken(ruleKey)) {
+      Preconditions.checkState(node.getChildren().size() == 3);
+
+      ParseNode tokenNode = node.getChildren().get(1);
+      int startOffset = tokenNode.getStartIndex();
+      int endOffset = tokenNode.getEndIndex();
+
+      return new SyntaxToken(
+        input.substring(startOffset, endOffset), startOffset, endOffset,
+        input.substring(node.getStartIndex(), node.getEndIndex()), node.getStartIndex(), node.getEndIndex());
+    }
+
     if (mapping.hasMethodForRuleKey(ruleKey)) {
       // TODO Drop useless intermediate nodes
       Preconditions.checkState(node.getChildren().size() == 1);

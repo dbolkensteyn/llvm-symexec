@@ -17,6 +17,7 @@ import org.sonar.sslr.grammar.LexerlessGrammarBuilder;
 import org.sonar.sslr.internal.matchers.InputBuffer;
 import org.sonar.sslr.internal.vm.FirstOfExpression;
 import org.sonar.sslr.internal.vm.ParsingExpression;
+import org.sonar.sslr.internal.vm.PatternExpression;
 import org.sonar.sslr.internal.vm.SequenceExpression;
 import org.sonar.sslr.internal.vm.StringExpression;
 import org.sonar.sslr.parser.ParseError;
@@ -106,6 +107,12 @@ public class Parser<T> {
       throw new RecognitionException(line, message);
     }
 
+    int charsParsed = result.getParseTreeRoot().getEndIndex();
+    int inputLength = input.input().length;
+    if (charsParsed != inputLength) {
+      throw new RuntimeException("Failed to parse the input entirely: " + charsParsed + " characters parsed, total input length = " + inputLength);
+    }
+
     return syntaxTreeCreator.create(result.getParseTreeRoot(), input);
   }
 
@@ -117,6 +124,7 @@ public class Parser<T> {
     private final Set<GrammarRuleKey> optionals = Sets.newHashSet();
     private final Set<GrammarRuleKey> oneOrMores = Sets.newHashSet();
     private final Set<GrammarRuleKey> zeroOrMores = Sets.newHashSet();
+    private final Set<GrammarRuleKey> tokens = Sets.newHashSet();
 
     private Method buildingMethod = null;
     private GrammarRuleKey ruleKey = null;
@@ -204,15 +212,28 @@ public class Parser<T> {
       return null;
     }
 
-    @Override
-    public AstNode invokeRule(GrammarRuleKey ruleKey) {
+    private AstNode invokeRule(GrammarRuleKey ruleKey) {
       push(new DelayedRuleInvocationExpression(b, ruleKey));
       return null;
     }
 
     @Override
-    public AstNode token(String value) {
-      expressionStack.push(new StringExpression(value));
+    public SyntaxToken token(String value) {
+      ParsingExpression expression = new SequenceExpression(new PatternExpression("\\s*+"), new StringExpression(value), new PatternExpression("\\s*+"));
+      GrammarRuleKey ruleKey = new DummyGrammarRuleKey("token", expression);
+      tokens.add(ruleKey);
+      b.rule(ruleKey).is(expression);
+      invokeRule(ruleKey);
+      return null;
+    }
+
+    @Override
+    public SyntaxToken pattern(String pattern) {
+      ParsingExpression expression = new SequenceExpression(new PatternExpression("\\s*+"), new PatternExpression(pattern), new PatternExpression("\\s*+"));
+      GrammarRuleKey ruleKey = new DummyGrammarRuleKey("pattern", expression);
+      tokens.add(ruleKey);
+      b.rule(ruleKey).is(expression);
+      invokeRule(ruleKey);
       return null;
     }
 
@@ -274,6 +295,10 @@ public class Parser<T> {
 
     public boolean isZeroOrMoreRule(Object ruleKey) {
       return zeroOrMores.contains(ruleKey);
+    }
+
+    public boolean isToken(Object ruleKey) {
+      return tokens.contains(ruleKey);
     }
 
   }

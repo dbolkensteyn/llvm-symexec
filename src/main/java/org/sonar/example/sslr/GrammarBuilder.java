@@ -1,6 +1,5 @@
 package org.sonar.example.sslr;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
 import java.util.List;
@@ -19,8 +18,8 @@ public interface GrammarBuilder {
 
   <T> Optional<List<T>> zeroOrMore(T method);
 
-  AstNode invokeRule(GrammarRuleKey ruleKey);
+  SyntaxToken token(String value);
 
-  AstNode token(String value);
+  SyntaxToken pattern(String pattern);
 
 }
