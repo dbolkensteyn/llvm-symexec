@@ -8,4 +8,8 @@ public class IrSyntaxFactory {
     return new RegisterSyntax(token);
   }
 
+  public BuiltinTypeSyntax builtinType(SyntaxToken token) {
+    return new BuiltinTypeSyntax(token);
+  }
+
 }
