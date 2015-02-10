@@ -1,5 +1,6 @@
 package org.sonar.example.sslr;
 
+import org.sonar.example.llvm.ir.SyntaxToken;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
 import java.util.List;

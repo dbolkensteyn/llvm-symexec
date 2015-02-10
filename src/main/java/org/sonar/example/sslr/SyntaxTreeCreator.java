@@ -9,6 +9,7 @@ import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.TokenType;
 import com.sonar.sslr.api.Trivia;
 import com.sonar.sslr.api.Trivia.TriviaKind;
+import org.sonar.example.llvm.ir.SyntaxToken;
 import org.sonar.example.sslr.Parser.GrammarBuilderInterceptor;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 import org.sonar.sslr.internal.grammar.MutableParsingRule;
@@ -86,8 +87,9 @@ public class SyntaxTreeCreator<T> {
       int endOffset = tokenNode.getEndIndex();
 
       return new SyntaxToken(
-        input.substring(startOffset, endOffset), startOffset, endOffset,
-        input.substring(node.getStartIndex(), node.getEndIndex()), node.getStartIndex(), node.getEndIndex());
+        input,
+        startOffset, endOffset,
+        node.getStartIndex(), node.getEndIndex());
     }
 
     if (mapping.hasMethodForRuleKey(ruleKey)) {

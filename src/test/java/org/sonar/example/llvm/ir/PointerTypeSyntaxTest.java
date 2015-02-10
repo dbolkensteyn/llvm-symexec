@@ -9,12 +9,16 @@ public class PointerTypeSyntaxTest {
 
   @Test
   public void test() {
-    PointerTypeSyntax t = ParserTest.parse(IrGrammarRuleKeys.POINTER_TYPE, "i32*");
+    PointerTypeSyntax t = ParserTest.parse(IrGrammarRuleKeys.POINTER_TYPE, " i32* ");
+    assertThat(t.value()).isEqualTo("i32*");
+    assertThat(t.fullValue()).isEqualTo(" i32* ");
     assertThat(t.type()).isInstanceOf(BuiltinTypeSyntax.class);
     assertThat(((BuiltinTypeSyntax) t.type()).name()).isEqualTo("i32");
     assertThat(t.size()).isEqualTo(4);
 
     t = ParserTest.parse(IrGrammarRuleKeys.POINTER_TYPE, " i32** ");
+    assertThat(t.value()).isEqualTo("i32**");
+    assertThat(t.fullValue()).isEqualTo(" i32** ");
     assertThat(t.type()).isInstanceOf(PointerTypeSyntax.class);
     assertThat(((PointerTypeSyntax) t.type()).type()).isInstanceOf(BuiltinTypeSyntax.class);
   }

@@ -1,7 +1,6 @@
 package org.sonar.example.llvm.ir;
 
 import com.google.common.base.Preconditions;
-import org.sonar.example.sslr.SyntaxToken;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class IrSyntaxFactory {
     IdentifierSyntax result, SyntaxToken equalToken, SyntaxToken allocaToken, TypeSyntax type,
     SyntaxToken commaToken, SyntaxToken alignToken, SyntaxToken alignment) {
 
-    return new AllocaInstructionSyntax(result, type);
+    return new AllocaInstructionSyntax(result, equalToken, allocaToken, type, commaToken, alignToken, alignment);
   }
 
 }

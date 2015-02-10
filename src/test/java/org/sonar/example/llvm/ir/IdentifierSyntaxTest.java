@@ -9,7 +9,11 @@ public class IdentifierSyntaxTest {
 
   @Test
   public void test() {
-    IdentifierSyntax t = ParserTest.parse(IrGrammarRuleKeys.IDENTIFIER, "%1");
+    IdentifierSyntax t = ParserTest.parse(IrGrammarRuleKeys.IDENTIFIER, " %1 ");
+
+    assertThat(t.value()).isEqualTo("%1");
+    assertThat(t.fullValue()).isEqualTo(" %1 ");
+
     assertThat(t.name()).isEqualTo("%1");
 
     t = ParserTest.parse(IrGrammarRuleKeys.IDENTIFIER, " %max ");

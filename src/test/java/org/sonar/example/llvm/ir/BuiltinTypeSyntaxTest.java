@@ -9,12 +9,13 @@ public class BuiltinTypeSyntaxTest {
 
   @Test
   public void test() {
-    BuiltinTypeSyntax t = ParserTest.parse(IrGrammarRuleKeys.BUILTIN_TYPE, "i32");
+    BuiltinTypeSyntax t = ParserTest.parse(IrGrammarRuleKeys.BUILTIN_TYPE, " i32 ");
+
+    assertThat(t.value()).isEqualTo("i32");
+    assertThat(t.fullValue()).isEqualTo(" i32 ");
+
     assertThat(t.name()).isEqualTo("i32");
     assertThat(t.size()).isEqualTo(4);
-
-    t = ParserTest.parse(IrGrammarRuleKeys.BUILTIN_TYPE, " i32 ");
-    assertThat(t.name()).isEqualTo("i32");
   }
 
 }

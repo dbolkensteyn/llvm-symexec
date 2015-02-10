@@ -11,6 +11,9 @@ public class TypeSyntaxTest {
   public void test() {
     TypeSyntax t = ParserTest.parse(IrGrammarRuleKeys.TYPE, "i32");
     assertThat(t).isInstanceOf(BuiltinTypeSyntax.class);
+
+    t = ParserTest.parse(IrGrammarRuleKeys.TYPE, "i32*");
+    assertThat(t).isInstanceOf(PointerTypeSyntax.class);
   }
 
 }

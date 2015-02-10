@@ -1,6 +1,8 @@
 package org.sonar.example.llvm.ir;
 
-import org.sonar.example.sslr.SyntaxToken;
+import com.google.common.collect.ImmutableList;
+
+import java.util.List;
 
 public class IdentifierSyntax extends SyntaxNode {
 
@@ -8,6 +10,11 @@ public class IdentifierSyntax extends SyntaxNode {
 
   public IdentifierSyntax(SyntaxToken token) {
     this.token = token;
+  }
+
+  @Override
+  public List<SyntaxNode> children() {
+    return ImmutableList.<SyntaxNode>of(token);
   }
 
   public String name() {
