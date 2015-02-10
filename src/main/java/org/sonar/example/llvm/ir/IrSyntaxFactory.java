@@ -44,4 +44,15 @@ public class IrSyntaxFactory {
     return new StoreInstructionSyntax(storeToken, valueType, value, commaToken1, pointerType, pointer, commaToken2, alignToken, alignment);
   }
 
+  public LoadInstructionSyntax loadInstruction(
+    IdentifierSyntax result, SyntaxToken equalToken, SyntaxToken loadToken,
+    TypeSyntax pointerType, IdentifierSyntax pointer,
+    SyntaxToken commaToken, SyntaxToken alignToken, SyntaxToken alignment) {
+
+    return new LoadInstructionSyntax(
+      result, equalToken, loadToken,
+      pointerType, pointer,
+      commaToken, alignToken, alignment);
+  }
+
 }

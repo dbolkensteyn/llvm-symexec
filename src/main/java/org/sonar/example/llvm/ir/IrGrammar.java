@@ -13,7 +13,8 @@ public class IrGrammar {
     BUILTIN_TYPE,
     POINTER_TYPE,
     ALLOCA_INSTRUCTION,
-    STORE_INSTRUCTION;
+    STORE_INSTRUCTION,
+    LOAD_INSTRUCTION;
   }
 
   private final GrammarBuilder b;
@@ -72,6 +73,15 @@ public class IrGrammar {
           b.token("store"),
           TYPE(), EXPRESSION(),
           b.token(","), TYPE(), IDENTIFIER(),
+          b.token(","), b.token("align"), b.pattern("[0-9]++")));
+  }
+
+  public LoadInstructionSyntax LOAD_INSTRUCTION() {
+    return b.<LoadInstructionSyntax>nonterminal(IrGrammarRuleKeys.LOAD_INSTRUCTION)
+      .is(
+        f.loadInstruction(
+          IDENTIFIER(), b.token("="), b.token("load"),
+          TYPE(), IDENTIFIER(),
           b.token(","), b.token("align"), b.pattern("[0-9]++")));
   }
 
