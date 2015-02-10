@@ -6,8 +6,12 @@ import java.util.List;
 
 public class IrSyntaxFactory {
 
-  public IdentifierSyntax register(SyntaxToken token) {
+  public IdentifierSyntax identifier(SyntaxToken token) {
     return new IdentifierSyntax(token);
+  }
+
+  public NullLiteralSyntax nullLiteral(SyntaxToken token) {
+    return new NullLiteralSyntax(token);
   }
 
   public BuiltinTypeSyntax builtinType(SyntaxToken token) {
@@ -29,6 +33,15 @@ public class IrSyntaxFactory {
     SyntaxToken commaToken, SyntaxToken alignToken, SyntaxToken alignment) {
 
     return new AllocaInstructionSyntax(result, equalToken, allocaToken, type, commaToken, alignToken, alignment);
+  }
+
+  public StoreInstructionSyntax storeInstruction(
+    SyntaxToken storeToken,
+    TypeSyntax valueType, ExpressionSyntax value,
+    SyntaxToken commaToken1, TypeSyntax pointerType, IdentifierSyntax pointer,
+    SyntaxToken commaToken2, SyntaxToken alignToken, SyntaxToken alignment) {
+
+    return new StoreInstructionSyntax(storeToken, valueType, value, commaToken1, pointerType, pointer, commaToken2, alignToken, alignment);
   }
 
 }

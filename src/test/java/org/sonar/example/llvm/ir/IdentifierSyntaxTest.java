@@ -11,8 +11,8 @@ public class IdentifierSyntaxTest {
   public void test() {
     IdentifierSyntax t = ParserTest.parse(IrGrammarRuleKeys.IDENTIFIER, " %1 ");
 
-    assertThat(t.value()).isEqualTo("%1");
-    assertThat(t.fullValue()).isEqualTo(" %1 ");
+    assertThat(t.toString()).isEqualTo("%1");
+    assertThat(t.toFullString()).isEqualTo(" %1 ");
 
     assertThat(t.name()).isEqualTo("%1");
 

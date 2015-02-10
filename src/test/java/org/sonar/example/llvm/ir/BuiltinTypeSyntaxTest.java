@@ -11,8 +11,8 @@ public class BuiltinTypeSyntaxTest {
   public void test() {
     BuiltinTypeSyntax t = ParserTest.parse(IrGrammarRuleKeys.BUILTIN_TYPE, " i32 ");
 
-    assertThat(t.value()).isEqualTo("i32");
-    assertThat(t.fullValue()).isEqualTo(" i32 ");
+    assertThat(t.toString()).isEqualTo("i32");
+    assertThat(t.toFullString()).isEqualTo(" i32 ");
 
     assertThat(t.name()).isEqualTo("i32");
     assertThat(t.size()).isEqualTo(4);

@@ -7,10 +7,13 @@ public class IrGrammar {
 
   public enum IrGrammarRuleKeys implements GrammarRuleKey {
     IDENTIFIER,
+    NULL_LITERAL,
+    EXPRESSION,
     TYPE,
     BUILTIN_TYPE,
     POINTER_TYPE,
-    ALLOCA_INSTRUCTION;
+    ALLOCA_INSTRUCTION,
+    STORE_INSTRUCTION;
   }
 
   private final GrammarBuilder b;
@@ -23,7 +26,20 @@ public class IrGrammar {
 
   public IdentifierSyntax IDENTIFIER() {
     return b.<IdentifierSyntax>nonterminal(IrGrammarRuleKeys.IDENTIFIER)
-      .is(f.register(b.pattern("[%@][-a-zA-Z$._0-9]++")));
+      .is(f.identifier(b.pattern("[%@][-a-zA-Z$._0-9]++")));
+  }
+
+  public NullLiteralSyntax NULL_LITERAL() {
+    return b.<NullLiteralSyntax>nonterminal(IrGrammarRuleKeys.NULL_LITERAL)
+      .is(f.nullLiteral(b.token("null")));
+  }
+
+  public ExpressionSyntax EXPRESSION() {
+    return b.<ExpressionSyntax>nonterminal(IrGrammarRuleKeys.EXPRESSION)
+      .is(
+        b.firstOf(
+          NULL_LITERAL(),
+          IDENTIFIER()));
   }
 
   public TypeSyntax TYPE() {
@@ -47,6 +63,16 @@ public class IrGrammar {
   public AllocaInstructionSyntax ALLOCA_INSTRUCTION() {
     return b.<AllocaInstructionSyntax>nonterminal(IrGrammarRuleKeys.ALLOCA_INSTRUCTION)
       .is(f.allocaInstruction(IDENTIFIER(), b.token("="), b.token("alloca"), TYPE(), b.token(","), b.token("align"), b.pattern("[0-9]++")));
+  }
+
+  public StoreInstructionSyntax STORE_INSTRUCTION() {
+    return b.<StoreInstructionSyntax>nonterminal(IrGrammarRuleKeys.STORE_INSTRUCTION)
+      .is(
+        f.storeInstruction(
+          b.token("store"),
+          TYPE(), EXPRESSION(),
+          b.token(","), TYPE(), IDENTIFIER(),
+          b.token(","), b.token("align"), b.pattern("[0-9]++")));
   }
 
 }

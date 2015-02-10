@@ -32,7 +32,7 @@ public class SyntaxToken extends SyntaxNode {
   }
 
   @Override
-  public String value() {
+  public String toString() {
     return input.substring(startOffset, endOffset);
   }
 
@@ -45,7 +45,7 @@ public class SyntaxToken extends SyntaxNode {
   }
 
   @Override
-  public String fullValue() {
+  public String toFullString() {
     return input.substring(fullStartOffset, fullEndOffset);
   }
 

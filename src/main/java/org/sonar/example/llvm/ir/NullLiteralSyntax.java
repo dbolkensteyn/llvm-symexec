@@ -4,21 +4,17 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 
-public class IdentifierSyntax extends ExpressionSyntax {
+public class NullLiteralSyntax extends ExpressionSyntax {
 
   private final SyntaxToken token;
 
-  public IdentifierSyntax(SyntaxToken token) {
+  public NullLiteralSyntax(SyntaxToken token) {
     this.token = token;
   }
 
   @Override
   public List<SyntaxNode> children() {
     return ImmutableList.<SyntaxNode>of(token);
-  }
-
-  public String name() {
-    return token.toString();
   }
 
 }

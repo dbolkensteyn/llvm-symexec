@@ -9,7 +9,8 @@ public abstract class SyntaxNode {
 
   public abstract List<SyntaxNode> children();
 
-  public String value() {
+  @Override
+  public String toString() {
     StringBuilder sb = new StringBuilder();
     List<SyntaxToken> tokens = tokens();
 
@@ -17,13 +18,13 @@ public abstract class SyntaxNode {
     for (SyntaxToken token : tokens) {
       String value;
       if (tokens.size() == 1) {
-        value = token.value();
+        value = token.toString();
       } else if (i == 0) {
         value = token.fullRightValue();
       } else if (i == tokens.size() - 1) {
         value = token.fullLeftValue();
       } else {
-        value = token.fullValue();
+        value = token.toFullString();
       }
 
       sb.append(value);
@@ -33,10 +34,10 @@ public abstract class SyntaxNode {
     return sb.toString();
   }
 
-  public String fullValue() {
+  public String toFullString() {
     StringBuilder sb = new StringBuilder();
     for (SyntaxNode child : children()) {
-      sb.append(child.fullValue());
+      sb.append(child.toFullString());
     }
 
     return sb.toString();

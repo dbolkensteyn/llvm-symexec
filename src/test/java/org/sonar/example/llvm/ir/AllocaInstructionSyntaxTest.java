@@ -11,12 +11,12 @@ public class AllocaInstructionSyntaxTest {
   public void test() {
     AllocaInstructionSyntax t = ParserTest.parse(IrGrammarRuleKeys.ALLOCA_INSTRUCTION, " %1 = alloca i32*, align 8 ");
 
-    assertThat(t.value()).isEqualTo("%1 = alloca i32*, align 8");
-    assertThat(t.fullValue()).isEqualTo(" %1 = alloca i32*, align 8 ");
+    assertThat(t.toString()).isEqualTo("%1 = alloca i32*, align 8");
+    assertThat(t.toFullString()).isEqualTo(" %1 = alloca i32*, align 8 ");
 
-    assertThat(t.result().value()).isEqualTo("%1");
+    assertThat(t.result().toString()).isEqualTo("%1");
     assertThat(t.type()).isInstanceOf(PointerTypeSyntax.class);
-    assertThat(t.type().value()).isEqualTo("i32*");
+    assertThat(t.type().toString()).isEqualTo("i32*");
   }
 
 }
