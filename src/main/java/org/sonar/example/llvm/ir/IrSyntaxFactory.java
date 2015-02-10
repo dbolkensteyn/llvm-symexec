@@ -25,4 +25,11 @@ public class IrSyntaxFactory {
     return result;
   }
 
+  public AllocaInstructionSyntax allocaInstruction(
+    IdentifierSyntax result, SyntaxToken equalToken, SyntaxToken allocaToken, TypeSyntax type,
+    SyntaxToken commaToken, SyntaxToken alignToken, SyntaxToken alignment) {
+
+    return new AllocaInstructionSyntax(result, type);
+  }
+
 }
