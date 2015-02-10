@@ -2,11 +2,11 @@ package org.sonar.example.llvm.ir;
 
 import org.sonar.example.sslr.SyntaxToken;
 
-public class RegisterSyntax extends SyntaxNode {
+public class IdentifierSyntax extends SyntaxNode {
 
   private final SyntaxToken token;
 
-  public RegisterSyntax(SyntaxToken token) {
+  public IdentifierSyntax(SyntaxToken token) {
     this.token = token;
   }
 

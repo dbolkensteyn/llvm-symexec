@@ -7,8 +7,8 @@ import java.util.List;
 
 public class IrSyntaxFactory {
 
-  public RegisterSyntax register(SyntaxToken token) {
-    return new RegisterSyntax(token);
+  public IdentifierSyntax register(SyntaxToken token) {
+    return new IdentifierSyntax(token);
   }
 
   public BuiltinTypeSyntax builtinType(SyntaxToken token) {

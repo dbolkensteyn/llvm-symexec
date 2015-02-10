@@ -6,7 +6,7 @@ import org.sonar.sslr.grammar.GrammarRuleKey;
 public class IrGrammar {
 
   public enum IrGrammarRuleKeys implements GrammarRuleKey {
-    REGISTER,
+    IDENTIFIER,
     TYPE,
     BUILTIN_TYPE,
     POINTER_TYPE;
@@ -20,9 +20,9 @@ public class IrGrammar {
     this.f = f;
   }
 
-  public RegisterSyntax REGISTER() {
-    return b.<RegisterSyntax>nonterminal(IrGrammarRuleKeys.REGISTER)
-      .is(f.register(b.pattern("%[0-9a-zA-Z.]++")));
+  public IdentifierSyntax IDENTIFIER() {
+    return b.<IdentifierSyntax>nonterminal(IrGrammarRuleKeys.IDENTIFIER)
+      .is(f.register(b.pattern("[%@][-a-zA-Z$._0-9]++")));
   }
 
   public TypeSyntax TYPE() {
