@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 
-public class StoreInstructionSyntax extends SyntaxNode {
+public class StoreInstructionSyntax extends InstructionSyntax {
 
   private final List<SyntaxNode> children;
   private final ExpressionSyntax value;

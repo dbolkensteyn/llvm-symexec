@@ -9,13 +9,18 @@ public class IrGrammar {
     IDENTIFIER,
     NULL_LITERAL,
     EXPRESSION,
-    TYPE,
+
     BUILTIN_TYPE,
     POINTER_TYPE,
+    TYPE,
+
     ALLOCA_INSTRUCTION,
     STORE_INSTRUCTION,
     LOAD_INSTRUCTION,
-    RET_INSTRUCTION;
+    RET_INSTRUCTION,
+    INSTRUCTION,
+
+    FUNCTION_DEFINITION;
   }
 
   private final GrammarBuilder b;
@@ -44,14 +49,6 @@ public class IrGrammar {
           IDENTIFIER()));
   }
 
-  public TypeSyntax TYPE() {
-    return b.<TypeSyntax>nonterminal(IrGrammarRuleKeys.TYPE)
-      .is(
-        b.firstOf(
-          POINTER_TYPE(),
-          BUILTIN_TYPE()));
-  }
-
   public BuiltinTypeSyntax BUILTIN_TYPE() {
     return b.<BuiltinTypeSyntax>nonterminal(IrGrammarRuleKeys.BUILTIN_TYPE)
       .is(f.builtinType(b.token("i32")));
@@ -60,6 +57,14 @@ public class IrGrammar {
   public PointerTypeSyntax POINTER_TYPE() {
     return b.<PointerTypeSyntax>nonterminal(IrGrammarRuleKeys.POINTER_TYPE)
       .is(f.pointerType(BUILTIN_TYPE(), b.oneOrMore(b.token("*"))));
+  }
+
+  public TypeSyntax TYPE() {
+    return b.<TypeSyntax>nonterminal(IrGrammarRuleKeys.TYPE)
+      .is(
+        b.firstOf(
+          POINTER_TYPE(),
+          BUILTIN_TYPE()));
   }
 
   public AllocaInstructionSyntax ALLOCA_INSTRUCTION() {
@@ -89,6 +94,26 @@ public class IrGrammar {
   public RetInstructionSyntax RET_INSTRUCTION() {
     return b.<RetInstructionSyntax>nonterminal(IrGrammarRuleKeys.RET_INSTRUCTION)
       .is(f.retInstruction(b.token("ret"), b.token("void")));
+  }
+
+  public InstructionSyntax INSTRUCTION() {
+    return b.<InstructionSyntax>nonterminal(IrGrammarRuleKeys.INSTRUCTION)
+      .is(
+        b.firstOf(
+          ALLOCA_INSTRUCTION(),
+          STORE_INSTRUCTION(),
+          LOAD_INSTRUCTION(),
+          RET_INSTRUCTION()));
+  }
+
+  public FunctionDefinitionSyntax FUNCTION_DEFINITION() {
+    return b.<FunctionDefinitionSyntax>nonterminal(IrGrammarRuleKeys.FUNCTION_DEFINITION)
+      .is(
+        f.functionDefinition(
+          b.token("define"), b.token("void"), IDENTIFIER(),
+          b.token("("), TYPE(), IDENTIFIER(), b.token(")"),
+          b.token("#0"),
+          b.token("{"), b.oneOrMore(INSTRUCTION()), b.token("}")));
   }
 
 }

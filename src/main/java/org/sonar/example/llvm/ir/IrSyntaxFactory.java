@@ -59,4 +59,17 @@ public class IrSyntaxFactory {
     return new RetInstructionSyntax(retToken, voidToken);
   }
 
+  public FunctionDefinitionSyntax functionDefinition(
+    SyntaxToken defineToken, SyntaxToken voidToken, IdentifierSyntax identifier,
+    SyntaxToken openParenToken, TypeSyntax paramType, IdentifierSyntax param, SyntaxToken closeParenToken,
+    SyntaxToken unnamedAddressToken,
+    SyntaxToken openBraceToken, List<InstructionSyntax> instructions, SyntaxToken closeBraceToken) {
+
+    return new FunctionDefinitionSyntax(
+      defineToken, voidToken, identifier,
+      openParenToken, paramType, param, closeParenToken,
+      unnamedAddressToken,
+      openBraceToken, instructions, closeBraceToken);
+  }
+
 }

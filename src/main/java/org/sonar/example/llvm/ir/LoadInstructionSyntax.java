@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 
-public class LoadInstructionSyntax extends SyntaxNode {
+public class LoadInstructionSyntax extends InstructionSyntax {
 
   private final List<SyntaxNode> children;
   private final IdentifierSyntax result;

@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 
-public class RetInstructionSyntax extends SyntaxNode {
+public class RetInstructionSyntax extends InstructionSyntax {
 
   private final List<SyntaxNode> children;
 
