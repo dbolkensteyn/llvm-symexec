@@ -164,7 +164,7 @@ public class Parser<T> {
 
     @Override
     public Object is(Object method) {
-      Preconditions.checkState(expressionStack.size() == 1, "Unexpected stack size: " + expressionStack.size());
+      Preconditions.checkState(expressionStack.size() == 1, "Unexpected stack size: " + expressionStack.size() + ", got: " + expressionStack);
 
       ParsingExpression expression = pop();
       b.rule(ruleKey).is(expression);
