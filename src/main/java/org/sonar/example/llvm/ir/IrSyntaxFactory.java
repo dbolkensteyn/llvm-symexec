@@ -55,4 +55,8 @@ public class IrSyntaxFactory {
       commaToken, alignToken, alignment);
   }
 
+  public RetInstructionSyntax retInstruction(SyntaxToken retToken, SyntaxToken voidToken) {
+    return new RetInstructionSyntax(retToken, voidToken);
+  }
+
 }

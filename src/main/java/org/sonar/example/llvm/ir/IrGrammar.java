@@ -14,7 +14,8 @@ public class IrGrammar {
     POINTER_TYPE,
     ALLOCA_INSTRUCTION,
     STORE_INSTRUCTION,
-    LOAD_INSTRUCTION;
+    LOAD_INSTRUCTION,
+    RET_INSTRUCTION;
   }
 
   private final GrammarBuilder b;
@@ -83,6 +84,11 @@ public class IrGrammar {
           IDENTIFIER(), b.token("="), b.token("load"),
           TYPE(), IDENTIFIER(),
           b.token(","), b.token("align"), b.pattern("[0-9]++")));
+  }
+
+  public RetInstructionSyntax RET_INSTRUCTION() {
+    return b.<RetInstructionSyntax>nonterminal(IrGrammarRuleKeys.RET_INSTRUCTION)
+      .is(f.retInstruction(b.token("ret"), b.token("void")));
   }
 
 }
