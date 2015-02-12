@@ -13,14 +13,16 @@ public class PointerTypeSyntaxTest {
     assertThat(t.toString()).isEqualTo("i32*");
     assertThat(t.toFullString()).isEqualTo(" i32* ");
     assertThat(t.type()).isInstanceOf(BuiltinTypeSyntax.class);
-    assertThat(((BuiltinTypeSyntax) t.type()).name()).isEqualTo("i32");
-    assertThat(t.size()).isEqualTo(4);
+    assertThat(t.type().toString()).isEqualTo("i32");
 
     t = ParserTest.parse(IrGrammarRuleKeys.POINTER_TYPE, " i32** ");
     assertThat(t.toString()).isEqualTo("i32**");
     assertThat(t.toFullString()).isEqualTo(" i32** ");
     assertThat(t.type()).isInstanceOf(PointerTypeSyntax.class);
-    assertThat(((PointerTypeSyntax) t.type()).type()).isInstanceOf(BuiltinTypeSyntax.class);
+    assertThat(t.type().toString()).isEqualTo("i32*");
+
+    t = ParserTest.parse(IrGrammarRuleKeys.POINTER_TYPE, "%struct.my_struct_t*");
+    assertThat(t.toString()).isEqualTo("%struct.my_struct_t*");
   }
 
 }

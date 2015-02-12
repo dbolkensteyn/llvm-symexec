@@ -23,11 +23,4 @@ public class PointerTypeSyntax extends TypeSyntax {
     return type;
   }
 
-  @Override
-  public int size() {
-    // FIXME? Should be more clever?
-    // See http://stackoverflow.com/questions/1473935/can-the-size-of-pointers-vary-depending-on-whats-pointed-to
-    return 4;
-  }
-
 }

@@ -12,6 +12,7 @@ public class IrGrammar {
     EXPRESSION,
 
     BUILTIN_TYPE,
+    CUSTOM_TYPE,
     POINTER_TYPE,
     TYPE,
 
@@ -66,9 +67,19 @@ public class IrGrammar {
             b.token("i64"))));
   }
 
+  public CustomTypeSyntax CUSTOM_TYPE() {
+    return b.<CustomTypeSyntax>nonterminal(IrGrammarRuleKeys.CUSTOM_TYPE)
+      .is(f.customType(b.pattern("%[-a-zA-Z$._0-9]++")));
+  }
+
   public PointerTypeSyntax POINTER_TYPE() {
     return b.<PointerTypeSyntax>nonterminal(IrGrammarRuleKeys.POINTER_TYPE)
-      .is(f.pointerType(BUILTIN_TYPE(), b.oneOrMore(b.token("*"))));
+      .is(
+        f.pointerType(
+          b.firstOf(
+            BUILTIN_TYPE(),
+            CUSTOM_TYPE()),
+          b.oneOrMore(b.token("*"))));
   }
 
   public TypeSyntax TYPE() {
@@ -76,7 +87,8 @@ public class IrGrammar {
       .is(
         b.firstOf(
           POINTER_TYPE(),
-          BUILTIN_TYPE()));
+          BUILTIN_TYPE(),
+          CUSTOM_TYPE()));
   }
 
   public AllocaInstructionSyntax ALLOCA_INSTRUCTION() {

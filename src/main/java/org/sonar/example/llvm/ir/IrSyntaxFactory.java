@@ -24,6 +24,10 @@ public class IrSyntaxFactory {
     return new BuiltinTypeSyntax(token);
   }
 
+  public CustomTypeSyntax customType(SyntaxToken token) {
+    return new CustomTypeSyntax(token);
+  }
+
   public PointerTypeSyntax pointerType(TypeSyntax type, List<SyntaxToken> starTokens) {
     Preconditions.checkArgument(starTokens.size() >= 1);
 

@@ -14,6 +14,9 @@ public class TypeSyntaxTest {
 
     t = ParserTest.parse(IrGrammarRuleKeys.TYPE, "i32*");
     assertThat(t).isInstanceOf(PointerTypeSyntax.class);
+
+    t = ParserTest.parse(IrGrammarRuleKeys.TYPE, "%struct.my_struct_t");
+    assertThat(t).isInstanceOf(CustomTypeSyntax.class);
   }
 
 }
