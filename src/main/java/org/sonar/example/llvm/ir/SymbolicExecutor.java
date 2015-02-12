@@ -43,7 +43,7 @@ public class SymbolicExecutor {
 
         System.out.println(g);
       } else if (i instanceof RetInstructionSyntax) {
-        // Do nothing
+        break;
       } else {
         throw new UnsupportedOperationException("Unsupported instruction: " + i.toString());
       }

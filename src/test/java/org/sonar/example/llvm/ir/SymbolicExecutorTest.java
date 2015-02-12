@@ -23,6 +23,21 @@ public class SymbolicExecutorTest {
   }
 
   @Test
+  public void should_stop_evaluation_after_ret() {
+    FunctionDefinitionSyntax f = ParserTest.parse(
+      IrGrammarRuleKeys.FUNCTION_DEFINITION,
+      "define void @f1(i32* %p) #0 {",
+      "  ret void",
+      "  %1 = alloca i32*, align 8",
+      "  store i32* null, i32** %1, align 8",
+      "  %2 = load i32** %1, align 8",
+      "  %3 = load i32* %2, align 4",
+      "}");
+
+    new SymbolicExecutor().evaluate(f);
+  }
+
+  @Test
   public void should_detect_loading_from_null() {
     thrown.expectMessage("NPE: %5 = load i32* %4, align 4");
 
