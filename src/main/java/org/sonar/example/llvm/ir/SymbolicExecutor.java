@@ -7,11 +7,11 @@ import java.util.Map;
 
 public class SymbolicExecutor {
 
-  private final Map<String, SymbolicValue> values = Maps.newHashMap();
-  private final Map<SymbolicValue, SymbolicValue> memory = Maps.newHashMap();
+  private final Map<String, BaseValue> values = Maps.newHashMap();
+  private final Map<BaseValue, BaseValue> memory = Maps.newHashMap();
 
   public void evaluate(FunctionDefinitionSyntax f) {
-    newLeftValue(f.param(), new SomeValue());
+    newLeftValue(f.param(), new SymbolicValue());
 
     for (InstructionSyntax i : f.instructions()) {
       if (i instanceof AllocaInstructionSyntax) {
@@ -21,20 +21,20 @@ public class SymbolicExecutor {
       } else if (i instanceof StoreInstructionSyntax) {
         StoreInstructionSyntax s = (StoreInstructionSyntax) i;
 
-        SymbolicValue value = get(s.value());
+        BaseValue value = get(s.value());
         Preconditions.checkState(!value.isUninitialized(), "Cannot read an uninitialized value \"" + s.value().toString() + "\"! " + i.toString());
 
-        SymbolicValue pointer = get(s.pointer());
+        BaseValue pointer = get(s.pointer());
         Preconditions.checkState(!pointer.isNull(), "NPE: " + i.toString());
 
         store(pointer, value);
       } else if (i instanceof LoadInstructionSyntax) {
         LoadInstructionSyntax l = (LoadInstructionSyntax) i;
 
-        SymbolicValue pointer = get(l.pointer());
+        BaseValue pointer = get(l.pointer());
         Preconditions.checkState(!pointer.isNull(), "NPE: " + i.toString());
 
-        SymbolicValue value = load(pointer);
+        BaseValue value = load(pointer);
         Preconditions.checkState(!value.isUninitialized(), "Cannot load an uninitialized value from memory! " + i.toString());
 
         set(l.result(), value);
@@ -50,21 +50,21 @@ public class SymbolicExecutor {
     }
   }
 
-  private void newLeftValue(IdentifierSyntax identifier, SymbolicValue value) {
-    SomeValue address = new SomeValue();
+  private void newLeftValue(IdentifierSyntax identifier, BaseValue value) {
+    SymbolicValue address = new SymbolicValue();
     set(identifier, address);
     store(address, value);
   }
 
-  private void set(IdentifierSyntax identifier, SymbolicValue value) {
+  private void set(IdentifierSyntax identifier, BaseValue value) {
     String key = identifier.name();
     Preconditions.checkState(!values.containsKey(key), "Cannot rewrite the value of: " + identifier.toString());
     values.put(key, value);
   }
 
-  private SymbolicValue get(ExpressionSyntax expression) {
+  private BaseValue get(ExpressionSyntax expression) {
     if (expression instanceof IdentifierSyntax) {
-      SymbolicValue value = values.get(((IdentifierSyntax) expression).name());
+      BaseValue value = values.get(((IdentifierSyntax) expression).name());
       return value != null ? value : UninitializedValue.INSTANCE;
     } else if (expression instanceof NullLiteralSyntax) {
       return ConcreteIntValue.NULL;
@@ -75,16 +75,16 @@ public class SymbolicExecutor {
     throw new IllegalArgumentException("Unsupported expression: " + expression.toString());
   }
 
-  private void store(SymbolicValue address, SymbolicValue value) {
+  private void store(BaseValue address, BaseValue value) {
     memory.put(address, value);
   }
 
-  private SymbolicValue load(SymbolicValue address) {
-    SymbolicValue value = memory.get(address);
+  private BaseValue load(BaseValue address) {
+    BaseValue value = memory.get(address);
     return value != null ? value : UninitializedValue.INSTANCE;
   }
 
-  public abstract static class SymbolicValue {
+  public abstract static class BaseValue {
 
     public boolean isNull() {
       return false;
@@ -96,10 +96,10 @@ public class SymbolicExecutor {
 
   }
 
-  public static class SomeValue extends SymbolicValue {
+  public static class SymbolicValue extends BaseValue {
   }
 
-  public static class UninitializedValue extends SymbolicValue {
+  public static class UninitializedValue extends BaseValue {
 
     public final static UninitializedValue INSTANCE = new UninitializedValue();
 
@@ -113,7 +113,7 @@ public class SymbolicExecutor {
 
   }
 
-  public static class ConcreteIntValue extends SymbolicValue {
+  public static class ConcreteIntValue extends BaseValue {
 
     public static final ConcreteIntValue NULL = new ConcreteIntValue(0);
     private final int value;
