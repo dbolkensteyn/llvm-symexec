@@ -73,4 +73,19 @@ public class SymbolicExecutorTest {
     new SymbolicExecutor().evaluate(f);
   }
 
+  @Test
+  public void should_detect_reassignments_to_same_identifiers() {
+    thrown.expectMessage("Cannot rewrite the value of: %1");
+
+    FunctionDefinitionSyntax f = ParserTest.parse(
+      IrGrammarRuleKeys.FUNCTION_DEFINITION,
+      "define void @f1(i32* %p) #0 {",
+      "  %1 = alloca i32*, align 8",
+      "  %1 = alloca i32*, align 8",
+      "  ret void",
+      "}");
+
+    new SymbolicExecutor().evaluate(f);
+  }
+
 }
