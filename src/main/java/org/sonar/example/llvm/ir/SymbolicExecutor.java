@@ -41,7 +41,16 @@ public class SymbolicExecutor {
       } else if (i instanceof GepInstructionSyntax) {
         GepInstructionSyntax g = (GepInstructionSyntax) i;
 
-        System.out.println(g);
+        BaseValue address = get(g.pointer());
+        for (IntegerLiteralSyntax index : g.indexValues()) {
+          address = address.addressOf(index.value());
+          if (load(address).isUninitialized()) {
+            // FIXME: Do not assume all fields are initialized?
+            store(address, new SymbolicValue());
+          }
+        }
+
+        set(g.result(), address);
       } else if (i instanceof RetInstructionSyntax) {
         break;
       } else {
@@ -94,9 +103,26 @@ public class SymbolicExecutor {
       return false;
     }
 
+    public BaseValue addressOf(int index) {
+      return ConcreteIntValue.NULL;
+    }
+
   }
 
   public static class SymbolicValue extends BaseValue {
+
+    private final Map<Integer, SymbolicValue> indexAddresses = Maps.newHashMap();
+
+    @Override
+    public BaseValue addressOf(int index) {
+      SymbolicValue value = indexAddresses.get(indexAddresses);
+      if (value == null) {
+        value = new SymbolicValue();
+        indexAddresses.put(index, value);
+      }
+      return value;
+    }
+
   }
 
   public static class UninitializedValue extends BaseValue {

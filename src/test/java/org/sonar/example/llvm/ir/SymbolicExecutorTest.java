@@ -1,6 +1,5 @@
 package org.sonar.example.llvm.ir;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -120,7 +119,6 @@ public class SymbolicExecutorTest {
   }
 
   @Test
-  @Ignore
   public void should_detect_npe_after_gep() {
     thrown.expectMessage("NPE: store i32 0, i32* %5, align 4");
 
