@@ -59,6 +59,10 @@ public class SymbolicExecutorTest {
         Preconditions.checkState(!State.NULL.equals(pointer), "NPE: " + i.toString());
 
         set(l.result(), load(l.pointer()));
+      } else if (i instanceof RetInstructionSyntax) {
+        // Do nothing
+      } else {
+        throw new UnsupportedOperationException("Unsupported instruction: " + i.toString());
       }
     }
   }
