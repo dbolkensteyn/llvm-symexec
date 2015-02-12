@@ -2,16 +2,21 @@ package org.sonar.example.llvm.ir;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
 import java.util.List;
+import java.util.Map;
 
 public class BuiltinTypeSyntax extends TypeSyntax {
 
+  private static final Map<String, Integer> TYPE_SIZES = ImmutableMap.of(
+    "i32", 4,
+    "i64", 8);
   private final SyntaxToken token;
 
   public BuiltinTypeSyntax(SyntaxToken token) {
-    Preconditions.checkArgument("i32".equals(token.toString()), "Only built-in type i32 is supported, not: " + token.toString());
     this.token = token;
+    Preconditions.checkArgument(TYPE_SIZES.containsKey(name()), "Unsupported built-in type: " + name());
   }
 
   @Override
@@ -25,7 +30,7 @@ public class BuiltinTypeSyntax extends TypeSyntax {
 
   @Override
   public int size() {
-    return 4;
+    return TYPE_SIZES.get(name());
   }
 
 }

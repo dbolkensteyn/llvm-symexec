@@ -8,6 +8,7 @@ public class IrGrammar {
   public enum IrGrammarRuleKeys implements GrammarRuleKey {
     IDENTIFIER,
     NULL_LITERAL,
+    INTEGER_LITERAL,
     EXPRESSION,
 
     BUILTIN_TYPE,
@@ -18,6 +19,7 @@ public class IrGrammar {
     STORE_INSTRUCTION,
     LOAD_INSTRUCTION,
     RET_INSTRUCTION,
+    GEP_INSTRUCTION,
     INSTRUCTION,
 
     FUNCTION_DEFINITION;
@@ -41,17 +43,27 @@ public class IrGrammar {
       .is(f.nullLiteral(b.token("null")));
   }
 
+  public IntegerLiteralSyntax INTEGER_LITERAL() {
+    return b.<IntegerLiteralSyntax>nonterminal(IrGrammarRuleKeys.INTEGER_LITERAL)
+      .is(f.integerLiteral(b.pattern("[0-9]++")));
+  }
+
   public ExpressionSyntax EXPRESSION() {
     return b.<ExpressionSyntax>nonterminal(IrGrammarRuleKeys.EXPRESSION)
       .is(
         b.firstOf(
           NULL_LITERAL(),
-          IDENTIFIER()));
+          IDENTIFIER(),
+          INTEGER_LITERAL()));
   }
 
   public BuiltinTypeSyntax BUILTIN_TYPE() {
     return b.<BuiltinTypeSyntax>nonterminal(IrGrammarRuleKeys.BUILTIN_TYPE)
-      .is(f.builtinType(b.token("i32")));
+      .is(
+        f.builtinType(
+          b.firstOf(
+            b.token("i32"),
+            b.token("i64"))));
   }
 
   public PointerTypeSyntax POINTER_TYPE() {
@@ -96,6 +108,16 @@ public class IrGrammar {
       .is(f.retInstruction(b.token("ret"), b.token("void")));
   }
 
+  public GepInstructionSyntax GEP_INSTRUCTION() {
+    return b.<GepInstructionSyntax>nonterminal(IrGrammarRuleKeys.GEP_INSTRUCTION)
+      .is(
+        f.gepInstruction(
+          IDENTIFIER(), b.token("="),
+          b.token("getelementptr"), b.token("inbounds"),
+          TYPE(), IDENTIFIER(),
+          b.oneOrMore(f.newTuple1(b.token(","), TYPE(), INTEGER_LITERAL()))));
+  }
+
   public InstructionSyntax INSTRUCTION() {
     return b.<InstructionSyntax>nonterminal(IrGrammarRuleKeys.INSTRUCTION)
       .is(
@@ -103,7 +125,8 @@ public class IrGrammar {
           ALLOCA_INSTRUCTION(),
           STORE_INSTRUCTION(),
           LOAD_INSTRUCTION(),
-          RET_INSTRUCTION()));
+          RET_INSTRUCTION(),
+          GEP_INSTRUCTION()));
   }
 
   public FunctionDefinitionSyntax FUNCTION_DEFINITION() {

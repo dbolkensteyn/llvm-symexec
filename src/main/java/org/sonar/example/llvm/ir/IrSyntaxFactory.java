@@ -2,6 +2,8 @@ package org.sonar.example.llvm.ir;
 
 import com.google.common.base.Preconditions;
 
+import javax.annotation.Nullable;
+
 import java.util.List;
 
 public class IrSyntaxFactory {
@@ -12,6 +14,10 @@ public class IrSyntaxFactory {
 
   public NullLiteralSyntax nullLiteral(SyntaxToken token) {
     return new NullLiteralSyntax(token);
+  }
+
+  public IntegerLiteralSyntax integerLiteral(SyntaxToken token) {
+    return new IntegerLiteralSyntax(token);
   }
 
   public BuiltinTypeSyntax builtinType(SyntaxToken token) {
@@ -59,6 +65,15 @@ public class IrSyntaxFactory {
     return new RetInstructionSyntax(retToken, voidToken);
   }
 
+  public GepInstructionSyntax gepInstruction(
+    IdentifierSyntax result, SyntaxToken equalToken,
+    SyntaxToken gepToken, SyntaxToken inboundsToken,
+    TypeSyntax pointerType, IdentifierSyntax pointer,
+    List<Tuple<SyntaxToken, TypeSyntax, IntegerLiteralSyntax>> indexes) {
+
+    return new GepInstructionSyntax(result, equalToken, gepToken, inboundsToken, pointerType, pointer, indexes);
+  }
+
   public FunctionDefinitionSyntax functionDefinition(
     SyntaxToken defineToken, SyntaxToken voidToken, IdentifierSyntax identifier,
     SyntaxToken openParenToken, TypeSyntax paramType, IdentifierSyntax param, SyntaxToken closeParenToken,
@@ -70,6 +85,41 @@ public class IrSyntaxFactory {
       openParenToken, paramType, param, closeParenToken,
       unnamedAddressToken,
       openBraceToken, instructions, closeBraceToken);
+  }
+
+  public static class Tuple<T, U, V> {
+
+    private final T first;
+    private final U second;
+    private final V third;
+
+    public Tuple(T first, U second, @Nullable V third) {
+      this.first = first;
+      this.second = second;
+      this.third = third;
+    }
+
+    public T first() {
+      return first;
+    }
+
+    public U second() {
+      return second;
+    }
+
+    public V third() {
+      Preconditions.checkNotNull(third);
+      return third;
+    }
+
+  }
+
+  public <T, U, V> Tuple<T, U, V> newTuple1(T first, U second, V third) {
+    return newTuple(first, second, third);
+  }
+
+  private <T, U, V> Tuple<T, U, V> newTuple(T first, U second, V third) {
+    return new Tuple<T, U, V>(first, second, third);
   }
 
 }

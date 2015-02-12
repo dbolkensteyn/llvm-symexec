@@ -14,6 +14,9 @@ public class ExpressionSyntaxTest {
 
     t = ParserTest.parse(IrGrammarRuleKeys.EXPRESSION, "%foo");
     assertThat(t).isInstanceOf(IdentifierSyntax.class);
+
+    t = ParserTest.parse(IrGrammarRuleKeys.EXPRESSION, "42");
+    assertThat(t).isInstanceOf(IntegerLiteralSyntax.class);
   }
 
 }

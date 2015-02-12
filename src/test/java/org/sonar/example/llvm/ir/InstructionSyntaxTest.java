@@ -20,6 +20,9 @@ public class InstructionSyntaxTest {
 
     t = ParserTest.parse(IrGrammarRuleKeys.INSTRUCTION, "ret void");
     assertThat(t).isInstanceOf(RetInstructionSyntax.class);
+
+    t = ParserTest.parse(IrGrammarRuleKeys.INSTRUCTION, "%3 = getelementptr inbounds i32* %2, i64 0");
+    assertThat(t).isInstanceOf(GepInstructionSyntax.class);
   }
 
 }
