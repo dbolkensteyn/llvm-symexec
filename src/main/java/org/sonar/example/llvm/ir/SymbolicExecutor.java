@@ -1,14 +1,12 @@
 package org.sonar.example.llvm.ir;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
-
+import java.util.HashMap;
 import java.util.Map;
 
 public class SymbolicExecutor {
 
-  private final Map<String, BaseValue> values = Maps.newHashMap();
-  private final Map<BaseValue, BaseValue> memory = Maps.newHashMap();
+  private final Map<String, BaseValue> values = new HashMap<>();
+  private final Map<BaseValue, BaseValue> memory = new HashMap<>();
 
   public void evaluate(FunctionDefinitionSyntax f) {
     newLeftValue(f.param(), new SymbolicValue());
@@ -22,20 +20,28 @@ public class SymbolicExecutor {
         StoreInstructionSyntax s = (StoreInstructionSyntax) i;
 
         BaseValue value = get(s.value());
-        Preconditions.checkState(!value.isUninitialized(), "Cannot read an uninitialized value \"" + s.value().toString() + "\"! " + i.toString());
+        if (value.isUninitialized()) {
+          throw new IllegalStateException("Cannot read an uninitialized value \"" + s.value().toString() + "\"! " + i.toString());
+        }
 
         BaseValue pointer = get(s.pointer());
-        Preconditions.checkState(!pointer.isNull(), "NPE: " + i.toString());
+        if (pointer.isNull()) {
+          throw new IllegalStateException("NPE: " + i.toString());
+        }
 
         store(pointer, value);
       } else if (i instanceof LoadInstructionSyntax) {
         LoadInstructionSyntax l = (LoadInstructionSyntax) i;
 
         BaseValue pointer = get(l.pointer());
-        Preconditions.checkState(!pointer.isNull(), "NPE: " + i.toString());
+        if (pointer.isNull()) {
+          throw new IllegalStateException("NPE: " + i.toString());
+        }
 
         BaseValue value = load(pointer);
-        Preconditions.checkState(!value.isUninitialized(), "Cannot load an uninitialized value from memory! " + i.toString());
+        if (value.isUninitialized()) {
+          throw new IllegalStateException("Cannot load an uninitialized value from memory! " + i.toString());
+        }
 
         set(l.result(), value);
       } else if (i instanceof GepInstructionSyntax) {
@@ -67,7 +73,9 @@ public class SymbolicExecutor {
 
   private void set(IdentifierSyntax identifier, BaseValue value) {
     String key = identifier.name();
-    Preconditions.checkState(!values.containsKey(key), "Cannot rewrite the value of: " + identifier.toString());
+    if (values.containsKey(key)) {
+      throw new IllegalStateException("Cannot rewrite the value of: " + identifier.toString());
+    }
     values.put(key, value);
   }
 
@@ -111,7 +119,7 @@ public class SymbolicExecutor {
 
   public static class SymbolicValue extends BaseValue {
 
-    private final Map<Integer, SymbolicValue> indexAddresses = Maps.newHashMap();
+    private final Map<Integer, SymbolicValue> indexAddresses = new HashMap<>();
 
     @Override
     public BaseValue addressOf(int index) {

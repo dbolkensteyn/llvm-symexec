@@ -1,7 +1,5 @@
 package org.sonar.example.llvm.ir;
 
-import com.google.common.base.Preconditions;
-
 import javax.annotation.Nullable;
 
 import java.util.List;
@@ -29,7 +27,9 @@ public class IrSyntaxFactory {
   }
 
   public PointerTypeSyntax pointerType(TypeSyntax type, List<SyntaxToken> starTokens) {
-    Preconditions.checkArgument(starTokens.size() >= 1);
+    if (starTokens.isEmpty()) {
+      throw new IllegalArgumentException();
+    }
 
     PointerTypeSyntax result = null;
     for (SyntaxToken starToken : starTokens) {
@@ -112,7 +112,9 @@ public class IrSyntaxFactory {
     }
 
     public V third() {
-      Preconditions.checkNotNull(third);
+      if (third == null) {
+        throw new NullPointerException();
+      }
       return third;
     }
 

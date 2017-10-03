@@ -1,7 +1,7 @@
 package org.sonar.example.llvm.ir;
 
-import com.google.common.collect.ImmutableList;
-
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class PointerTypeSyntax extends TypeSyntax {
@@ -16,7 +16,7 @@ public class PointerTypeSyntax extends TypeSyntax {
 
   @Override
   public List<SyntaxNode> children() {
-    return ImmutableList.of(type, starToken);
+    return Collections.unmodifiableList(Arrays.asList(type, starToken));
   }
 
   public TypeSyntax type() {

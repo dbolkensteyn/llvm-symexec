@@ -1,7 +1,7 @@
 package org.sonar.example.llvm.ir;
 
-import com.google.common.collect.ImmutableList;
-
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class LoadInstructionSyntax extends InstructionSyntax {
@@ -15,10 +15,10 @@ public class LoadInstructionSyntax extends InstructionSyntax {
     TypeSyntax pointerType, IdentifierSyntax pointer,
     SyntaxToken commaToken, SyntaxToken alignToken, SyntaxToken alignment) {
 
-    this.children = ImmutableList.of(
+    this.children = Collections.unmodifiableList(Arrays.asList(
       result, equalToken, loadToken,
       pointerType, pointer,
-      commaToken, alignToken, alignment);
+      commaToken, alignToken, alignment));
 
     this.result = result;
     this.pointer = pointer;

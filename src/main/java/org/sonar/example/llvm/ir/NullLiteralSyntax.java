@@ -1,7 +1,6 @@
 package org.sonar.example.llvm.ir;
 
-import com.google.common.collect.ImmutableList;
-
+import java.util.Collections;
 import java.util.List;
 
 public class NullLiteralSyntax extends ExpressionSyntax {
@@ -14,7 +13,7 @@ public class NullLiteralSyntax extends ExpressionSyntax {
 
   @Override
   public List<SyntaxNode> children() {
-    return ImmutableList.<SyntaxNode>of(token);
+    return Collections.singletonList(token);
   }
 
 }

@@ -1,13 +1,13 @@
 package org.sonar.example.llvm.ir;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Joiner;
 import com.sonar.sslr.api.Rule;
 import com.sonar.sslr.api.TokenType;
 import com.sonar.sslr.api.Trivia;
 import com.sonar.sslr.api.typed.ActionParser;
 import com.sonar.sslr.api.typed.Input;
 import com.sonar.sslr.api.typed.NodeBuilder;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
@@ -36,12 +36,12 @@ public class ParserTest {
   }
 
   public static <T> T parse(GrammarRuleKey ruleKey, String... lines) {
-    return parse(ruleKey, Joiner.on('\n').join(lines));
+    return parse(ruleKey, String.join("\n", Arrays.asList(lines)));
   }
 
   public static <T> T parse(GrammarRuleKey ruleKey, String input) {
     return new ActionParser<T>(
-      Charsets.UTF_8,
+      StandardCharsets.UTF_8,
       IrGrammar.IrGrammarRuleKeys.createGrammarBuilder(),
       IrGrammar.class,
       new IrSyntaxFactory(),

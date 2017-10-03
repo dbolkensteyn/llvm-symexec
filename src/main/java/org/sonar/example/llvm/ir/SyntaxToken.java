@@ -1,7 +1,6 @@
 package org.sonar.example.llvm.ir;
 
-import com.google.common.collect.ImmutableList;
-
+import java.util.Collections;
 import java.util.List;
 
 public class SyntaxToken extends SyntaxNode {
@@ -24,7 +23,7 @@ public class SyntaxToken extends SyntaxNode {
 
   @Override
   public List<SyntaxNode> children() {
-    return ImmutableList.<SyntaxNode>of(this);
+    return Collections.singletonList(this);
   }
 
   public String value() {

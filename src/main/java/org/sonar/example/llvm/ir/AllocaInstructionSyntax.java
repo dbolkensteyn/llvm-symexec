@@ -1,7 +1,6 @@
 package org.sonar.example.llvm.ir;
 
-import com.google.common.collect.ImmutableList;
-
+import java.util.Arrays;
 import java.util.List;
 
 public class AllocaInstructionSyntax extends InstructionSyntax {
@@ -14,7 +13,7 @@ public class AllocaInstructionSyntax extends InstructionSyntax {
     IdentifierSyntax result, SyntaxToken equalToken, SyntaxToken allocaToken, TypeSyntax type,
     SyntaxToken commaToken, SyntaxToken alignToken, SyntaxToken alignment) {
 
-    this.children = ImmutableList.of(
+    this.children = Arrays.asList(
       result, equalToken, allocaToken, type,
       commaToken, alignToken, alignment);
 

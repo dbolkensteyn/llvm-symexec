@@ -1,6 +1,8 @@
 package org.sonar.example.llvm.ir;
 
-import com.google.common.collect.ImmutableList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import org.sonar.example.llvm.ir.IrSyntaxFactory.Tuple;
 
 import java.util.List;
@@ -18,22 +20,22 @@ public class GepInstructionSyntax extends InstructionSyntax {
     TypeSyntax pointerType, IdentifierSyntax pointer,
     List<Tuple<SyntaxToken, TypeSyntax, IntegerLiteralSyntax>> indexes) {
 
-    ImmutableList.Builder<SyntaxNode> childrenBuilder = ImmutableList.builder();
-    ImmutableList.Builder<IntegerLiteralSyntax> indexValuesBuilder = ImmutableList.builder();
-    childrenBuilder.add(
+    ArrayList<SyntaxNode> children = new ArrayList<>();
+    ArrayList<IntegerLiteralSyntax> indexValues = new ArrayList<>();
+    children.addAll(Arrays.asList(
       result, equalToken,
       gepToken, inboundsToken,
-      pointerType, pointer);
+      pointerType, pointer));
     for (Tuple<SyntaxToken, TypeSyntax, IntegerLiteralSyntax> index : indexes) {
-      childrenBuilder.add(index.first());
-      childrenBuilder.add(index.second());
-      childrenBuilder.add(index.third());
+      children.add(index.first());
+      children.add(index.second());
+      children.add(index.third());
 
-      indexValuesBuilder.add(index.third());
+      indexValues.add(index.third());
     }
 
-    this.children = childrenBuilder.build();
-    this.indexValues = indexValuesBuilder.build();
+    this.children = Collections.unmodifiableList(children);
+    this.indexValues = Collections.unmodifiableList(indexValues);
 
     this.result = result;
     this.pointer = pointer;

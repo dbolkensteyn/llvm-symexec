@@ -1,8 +1,7 @@
 package org.sonar.example.llvm.ir;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
-
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class SyntaxNode {
@@ -44,12 +43,12 @@ public abstract class SyntaxNode {
   }
 
   public List<SyntaxToken> tokens() {
-    ImmutableList.Builder<SyntaxToken> builder = ImmutableList.builder();
+    ArrayList<SyntaxToken> builder = new ArrayList<>();
     tokens(builder, this);
-    return builder.build();
+    return Collections.unmodifiableList(builder);
   }
 
-  private static void tokens(Builder<SyntaxToken> builder, SyntaxNode node) {
+  private static void tokens(ArrayList<SyntaxToken> builder, SyntaxNode node) {
     for (SyntaxNode child : node.children()) {
       if (child instanceof SyntaxToken) {
         builder.add((SyntaxToken) child);

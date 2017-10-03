@@ -1,7 +1,8 @@
 package org.sonar.example.llvm.ir;
 
-import com.google.common.collect.ImmutableList;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class FunctionDefinitionSyntax extends SyntaxNode {
@@ -17,16 +18,15 @@ public class FunctionDefinitionSyntax extends SyntaxNode {
     SyntaxToken unnamedAddressToken,
     SyntaxToken openBraceToken, List<InstructionSyntax> instructions, SyntaxToken closeBraceToken) {
 
-    ImmutableList.Builder<SyntaxNode> childrenBuilder = ImmutableList.builder();
-
-    childrenBuilder.add(
+    ArrayList<SyntaxNode> children = new ArrayList<>();
+    children.addAll(Arrays.asList(
       defineToken, voidToken, identifier,
       openParenToken, paramType, param, closeParenToken,
-      unnamedAddressToken);
-    childrenBuilder.add(openBraceToken);
-    childrenBuilder.addAll(instructions);
-    childrenBuilder.add(closeBraceToken);
-    this.children = childrenBuilder.build();
+      unnamedAddressToken));
+    children.add(openBraceToken);
+    children.addAll(instructions);
+    children.add(closeBraceToken);
+    this.children = Collections.unmodifiableList(children);
 
     this.identifier = identifier;
     this.param = param;
