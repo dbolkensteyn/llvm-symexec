@@ -18,9 +18,9 @@ public class ParserTest {
     @Override
     public Object createNonTerminal(GrammarRuleKey ruleKey, Rule rule, List<Object> children, int startIndex, int endIndex) {
       if (children.size() == 3) {
-        String leftValue = ((SyntaxToken)children.get(0)).toString();
-        String value = ((SyntaxToken)children.get(1)).toString();
-        String rightValue = ((SyntaxToken)children.get(2)).toString();
+        String leftValue = children.get(0).toString();
+        String value = children.get(1).toString();
+        String rightValue = children.get(2).toString();
         return new SyntaxToken(leftValue, value, rightValue);
       }
 
