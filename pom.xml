@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.sonar.example</groupId>
-  <artifactId>llvm-ir-poc</artifactId>
+  <groupId>org.sonarsource.example</groupId>
+  <artifactId>llvm-symexec</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <properties>
